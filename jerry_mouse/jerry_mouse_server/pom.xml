@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.bool</groupId>
+        <artifactId>jerry_mouse</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+
+    <modules>
+        <module>a00_simple_http_server</module>
+        <module>a01_simple_servlet_server</module>
+        <module>a02_servlet_context_support</module>
+        <module>a03_filter_chain_support</module>
+    </modules>
+
+    <artifactId>jerry_mouse_server</artifactId>
+    <packaging>pom</packaging>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+        </dependency>
+    </dependencies>
+
+
+</project>
