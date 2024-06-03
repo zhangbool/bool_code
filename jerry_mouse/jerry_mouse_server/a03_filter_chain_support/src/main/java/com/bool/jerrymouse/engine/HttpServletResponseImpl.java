@@ -20,6 +20,7 @@ import java.util.Locale;
 public class HttpServletResponseImpl implements HttpServletResponse {
 
     final HttpExchangeResponse exchangeResponse;
+    int status = 200;
 
     public HttpServletResponseImpl(HttpExchangeResponse exchangeResponse) {
         this.exchangeResponse = exchangeResponse;
@@ -29,7 +30,7 @@ public class HttpServletResponseImpl implements HttpServletResponse {
 
     @Override
     public PrintWriter getWriter() throws IOException {
-        this.exchangeResponse.sendResponseHeaders(200, 0);
+        this.exchangeResponse.sendResponseHeaders(this.status, 0);
         return new PrintWriter(this.exchangeResponse.getResponseBody(), true, StandardCharsets.UTF_8);
     }
 
@@ -48,7 +49,6 @@ public class HttpServletResponseImpl implements HttpServletResponse {
 
     @Override
     public void addCookie(Cookie cookie) {
-
     }
 
     @Override
@@ -68,8 +68,12 @@ public class HttpServletResponseImpl implements HttpServletResponse {
 
 
     @Override
-    public void sendError(int i, String s) throws IOException {
-
+    public void sendError(int sc, String msg) throws IOException {
+        this.status = sc;
+        PrintWriter pw = getWriter();
+        // 默认状态码是200, 这里如果传入新的状态码会进行覆盖
+        pw.write(String.format("<h1>%d %s</h1>", sc, msg));
+        pw.close();
     }
 
     @Override
@@ -141,6 +145,8 @@ public class HttpServletResponseImpl implements HttpServletResponse {
     public String getContentType() {
         return "";
     }
+
+
 
     @Override
     public ServletOutputStream getOutputStream() throws IOException {

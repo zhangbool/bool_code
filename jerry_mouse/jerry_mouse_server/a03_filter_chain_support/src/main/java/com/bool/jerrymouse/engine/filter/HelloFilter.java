@@ -8,6 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @WebFilter(urlPatterns = "/hello")
@@ -25,11 +29,15 @@ public class HelloFilter implements Filter {
             if (name != null && names.contains(name)) {
                 chain.doFilter(request, response);
             } else {
-                logger.info("--------------------------------ivanl0001--------------------------------");
                 logger.info("Access denied: name = {}", name);
                 HttpServletResponse resp = (HttpServletResponse) response;
+
+                // 注意: 之前这里只是设置了sendError, 没有write内容, 请求就会一直挂着. 暂时还没搞明白为啥原先的代码可以返回
+                // 老子终于明白了: 这个sendError是覆写的方法!!!!!!!草
                 resp.sendError(403, "Forbidden");
-                logger.info("--------------------------------ivanl0002--------------------------------");
+                /*try (PrintWriter out = resp.getWriter()) {
+                    out.write("Forbidden");
+                }*/
             }
         } catch (Exception e) {
             logger.error("Exception in filter: {}", e.getMessage());
@@ -37,6 +45,10 @@ public class HelloFilter implements Filter {
             if (!resp.isCommitted()) {
                 resp.resetBuffer();
                 resp.sendError(500, "Internal Server Error");
+                /*String s = "<h1>Hello, world.</h1><p>" + LocalDateTime.now().withNano(0) + "</p>";
+                try (OutputStream out = resp.getOutputStream()) {
+                    out.write(s.getBytes(StandardCharsets.UTF_8));
+                }*/
             }
         }
     }

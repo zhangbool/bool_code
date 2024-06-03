@@ -1,4 +1,4 @@
-package com.bool.jerrymouse;
+package com.bool;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -21,14 +21,14 @@ import java.time.LocalDateTime;
  * http -> tcp
  * 通过继承: HttpHandler, 可以直接实现一个网络服务器, 而不需要再进行socket变成
  **/
-public class SimpleHttpServer implements HttpHandler, AutoCloseable {
+public class Server implements HttpHandler, AutoCloseable {
 
      final Logger logger = LoggerFactory.getLogger(getClass());
     public static void main(String[] args)  {
         String host = "127.0.0.1";
         int port = 8080;
 
-        try(SimpleHttpServer connector = new SimpleHttpServer(host, port)){
+        try(Server connector = new Server(host, port)){
             connector.start();
             for (;;) {
                 try {
@@ -54,11 +54,11 @@ public class SimpleHttpServer implements HttpHandler, AutoCloseable {
      * @param port
      * @throws IOException
      */
-    public SimpleHttpServer(String host, int port) throws IOException {
+    public Server(String host, int port) throws IOException {
         this.host = host;
         this.port = port;
         this.httpServer = HttpServer.create(new InetSocketAddress(host, port), 0);
-        this.httpServer.createContext("/", this);
+        this.httpServer.createContext("/01", this);
     }
 
     public void start() {
@@ -82,13 +82,13 @@ public class SimpleHttpServer implements HttpHandler, AutoCloseable {
         String path = uri.getPath();
         String query = uri.getRawQuery();
         logger.info("method: {}, path: {}, query: {}", method, path, query); ;
+
         // 输出响应的Header:
         Headers respHeaders = httpExchange.getResponseHeaders();
         respHeaders.set("Content-Type", "text/html; charset=utf-8");
         respHeaders.set("Cache-Control", "no-cache");
         // 设置200响应:
         httpExchange.sendResponseHeaders(200, 0);
-
         String s = "<h1>Hello, world.</h1><p>" + LocalDateTime.now().withNano(0) + "</p>";
         try (OutputStream out = httpExchange.getResponseBody()) {
             out.write(s.getBytes(StandardCharsets.UTF_8));
