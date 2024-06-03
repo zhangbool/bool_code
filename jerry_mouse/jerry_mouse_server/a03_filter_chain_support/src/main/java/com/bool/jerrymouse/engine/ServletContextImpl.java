@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import jakarta.servlet.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +20,6 @@ import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * @author : 不二
@@ -27,7 +28,7 @@ import java.util.logging.Logger;
  **/
 public class ServletContextImpl implements ServletContext {
 
-    Logger logger = Logger.getLogger(ServletContextImpl.class.getName());
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     final List<FilterMapping> filterMappings = new ArrayList<>();
     final Map<String, FilterRegistrationImpl> filterRegistrations = new HashMap<>();
@@ -62,7 +63,7 @@ public class ServletContextImpl implements ServletContext {
                 }
                 registration.initialized = true;
             } catch (ServletException e) {
-                logger.warning("init filter failed: " + name + " / " + registration.filter.getClass().getName() + e.toString());
+                logger.error("init filter failed: {} / {}{}", name, registration.filter.getClass().getName(), e.toString());
             }
         }
     }
@@ -100,7 +101,7 @@ public class ServletContextImpl implements ServletContext {
                 }
                 registration.initialized = true;
             } catch (ServletException e) {
-                logger.warning("init servlet failed: " + name + " / " + registration.servlet.getClass().getName() + ": " + e.getMessage());
+                logger.error("init servlet failed: {} / {}: {}", name, registration.servlet.getClass().getName(), e.getMessage());
             }
         }
 
@@ -398,7 +399,7 @@ public class ServletContextImpl implements ServletContext {
 
     @Override
     public Enumeration<String> getInitParameterNames() {
-        return null;
+        return Collections.emptyEnumeration();
     }
 
     @Override

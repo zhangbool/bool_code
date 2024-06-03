@@ -1,11 +1,13 @@
 package com.bool.jerrymouse.engine.mapping;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.regex.Pattern;
 
 public class AbstractMapping implements Comparable<AbstractMapping> {
 
-    Logger logger = Logger.getLogger(this.getClass().getName());
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     final Pattern pattern;
     final String url;

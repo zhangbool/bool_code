@@ -1,5 +1,6 @@
 package com.bool.jerrymouse.connector;
 
+import com.bool.jerrymouse.SimpleServletServer;
 import com.bool.jerrymouse.engine.HttpServletRequestImpl;
 import com.bool.jerrymouse.engine.HttpServletResponseImpl;
 import com.bool.jerrymouse.engine.ServletContextImpl;
@@ -12,12 +13,13 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * @author : 不二
@@ -26,7 +28,7 @@ import java.util.logging.Logger;
  **/
 public class HttpConnector implements HttpHandler, AutoCloseable  {
 
-    Logger logger = Logger.getGlobal();
+    final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     final HttpServer httpServer;
     final String host;
@@ -42,7 +44,6 @@ public class HttpConnector implements HttpHandler, AutoCloseable  {
 
         this.servletContext.initFilters(List.of(LogFilter.class, HelloFilter.class));
         this.servletContext.initServlets(List.of(IndexServlet.class, HelloServlet.class));
-
 
         this.host = host;
         this.port = port;
@@ -73,7 +74,6 @@ public class HttpConnector implements HttpHandler, AutoCloseable  {
 
             // 之前是来了请求直接统一处理
             // process(request, response);
-
             // 我们这里要通过上下文来处理不同的路径请求
             // process:
             try {
@@ -83,9 +83,7 @@ public class HttpConnector implements HttpHandler, AutoCloseable  {
                 System.out.println(e.getMessage());
             }
         } catch (Exception e) {
-
             logger.info(e.getMessage());
-
             throw new RuntimeException(e);
         }
     }

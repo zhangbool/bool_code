@@ -47,7 +47,6 @@ public class FilterRegistrationImpl implements FilterRegistration.Dynamic {
         };
     }
 
-
     FilterRegistrationImpl(ServletContext servletContext, String name, Filter filter) {
         this.servletContext = servletContext;
         this.name = name;

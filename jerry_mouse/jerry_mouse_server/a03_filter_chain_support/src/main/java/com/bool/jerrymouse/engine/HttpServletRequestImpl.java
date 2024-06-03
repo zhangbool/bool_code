@@ -1,9 +1,12 @@
 package com.bool.jerrymouse.engine;
 
 
+import com.bool.jerrymouse.SimpleServletServer;
 import com.bool.jerrymouse.connector.HttpExchangeRequest;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +15,6 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -22,7 +24,7 @@ import java.util.regex.Pattern;
  **/
 public class HttpServletRequestImpl implements HttpServletRequest {
 
-    Logger logger = Logger.getLogger(HttpServletRequestImpl.class.getName());
+    final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     final HttpExchangeRequest exchangeRequest;
 
@@ -46,7 +48,7 @@ public class HttpServletRequestImpl implements HttpServletRequest {
     // 只需要重写一个获取参数的方法即可
     @Override
     public String getParameter(String s) {
-        logger.info("请求参数方法: " + s);
+        logger.info("请求参数方法: {}", s);
         String query = this.exchangeRequest.getRequestURI().getRawQuery();
         if (query != null) {
             Map<String, String> params = parseQuery(query);

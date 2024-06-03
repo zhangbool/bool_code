@@ -4,15 +4,16 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Set;
-import java.util.logging.Logger;
 
 @WebFilter(urlPatterns = "/hello")
 public class HelloFilter implements Filter {
 
-    Logger logger = Logger.getLogger(HelloFilter.class.getName());
+    Logger logger = LoggerFactory.getLogger(this.getClass());
     Set<String> names = Set.of("Bob", "Alice", "Tom", "Jerry");
 
     @Override
@@ -20,16 +21,23 @@ public class HelloFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         String name = req.getParameter("name");
         logger.info("Check parameter name = " +  name);
-        if (name != null && names.contains(name)) {
-            chain.doFilter(request, response);
-        } else {
-            logger.warning("Access denied: name = " +  name);
-            HttpServletResponse resp = (HttpServletResponse) response;
-            if (!response.isCommitted()) {
-                resp.resetBuffer(); // Clear any data in the buffer
+        try{
+            if (name != null && names.contains(name)) {
+                chain.doFilter(request, response);
+            } else {
+                logger.info("--------------------------------ivanl0001--------------------------------");
+                logger.info("Access denied: name = {}", name);
+                HttpServletResponse resp = (HttpServletResponse) response;
                 resp.sendError(403, "Forbidden");
+                logger.info("--------------------------------ivanl0002--------------------------------");
             }
-            return; // Ensure to return to stop further processing
+        } catch (Exception e) {
+            logger.error("Exception in filter: {}", e.getMessage());
+            HttpServletResponse resp = (HttpServletResponse) response;
+            if (!resp.isCommitted()) {
+                resp.resetBuffer();
+                resp.sendError(500, "Internal Server Error");
+            }
         }
     }
 }

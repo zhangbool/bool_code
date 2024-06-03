@@ -29,6 +29,8 @@ public class FilterChainImpl  implements FilterChain {
             index++;
             filters[current].doFilter(request, response, this);
         } else {
+
+            System.out.println("--------------test--------------");
             servlet.service(request, response);
         }
     }

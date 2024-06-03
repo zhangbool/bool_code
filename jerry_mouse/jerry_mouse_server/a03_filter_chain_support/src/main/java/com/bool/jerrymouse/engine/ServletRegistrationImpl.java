@@ -5,9 +5,10 @@ import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletRegistration;
 import jakarta.servlet.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * @author : 不二
@@ -16,7 +17,7 @@ import java.util.logging.Logger;
  **/
 public class ServletRegistrationImpl implements ServletRegistration.Dynamic {
 
-    Logger logger = Logger.getLogger(ServletRegistrationImpl.class.getName());
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     final ServletContext servletContext;
     final Servlet servlet;

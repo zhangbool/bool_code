@@ -2,8 +2,8 @@ package com.bool.jerrymouse;
 
 
 import com.bool.jerrymouse.connector.HttpConnector;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author : 不二
@@ -15,10 +15,12 @@ public class SimpleServletServer {
 
     public static void main(String[] args) throws Exception {
 
-        Logger logger = Logger.getGlobal();
+//        Logger logger = Logger.getGlobal();
+        final Logger logger = LoggerFactory.getLogger(SimpleServletServer.class);
 
         try (HttpConnector httpConnector = new HttpConnector("127.0.0.1", 8083)) {
             httpConnector.start();
+            logger.info("tomcat server started successfully");
             for (; ; ) {
                 try {
                     Thread.sleep(1000);

@@ -6,9 +6,10 @@ import jakarta.servlet.Servlet;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.annotation.WebInitParam;
 import jakarta.servlet.annotation.WebServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -18,7 +19,10 @@ import java.util.stream.Collectors;
  **/
 public class AnnoUtils {
 
-    static Logger logger = Logger.getLogger(AnnoUtils.class.getName());
+//    static Logger logger = Logger.getLogger(AnnoUtils.class.getName());
+
+
+    static Logger logger = LoggerFactory.getLogger(AnnoUtils.class);
 
     /**
      * 根据Servlet获取对应的名字, string,
@@ -28,7 +32,7 @@ public class AnnoUtils {
     public static String getServletName(Class<? extends Servlet> clazz) {
         WebServlet w = clazz.getAnnotation(WebServlet.class);
         if (w != null && !w.name().isEmpty()) {
-            logger.info("从annotation中获取:name = " + w.name());
+            logger.info("从annotation中获取:name = {}", w.name());
             // 如果有name的标注, 使用name
             return w.name();
         }
@@ -87,7 +91,7 @@ public class AnnoUtils {
         String name = clazz.getSimpleName();
         // 把类名首字母变小写
         name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
-        logger.info("annotation中无name, 获取默认值: name = " + name);
+        logger.info("annotation中无name, 获取默认值: name = {}", name);
         return name;
     }
 

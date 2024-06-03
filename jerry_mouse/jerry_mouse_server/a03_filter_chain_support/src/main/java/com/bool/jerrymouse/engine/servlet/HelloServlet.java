@@ -14,6 +14,9 @@ public class HelloServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        System.out.println("======================9999======================");
+
         String name = req.getParameter("name");
         String html = "<h1>Hello, " + (name == null ? "world" : name) + ".</h1>";
         resp.setContentType("text/html");
