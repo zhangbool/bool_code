@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.bool</groupId>
-        <artifactId>jerry_mouse</artifactId>
+        <artifactId>jerry_mouse_server</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>filter_test</artifactId>
+    <artifactId>a04_session_support</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

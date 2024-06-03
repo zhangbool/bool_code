@@ -15,7 +15,6 @@
 
     <modules>
         <module>jerry_mouse_server</module>
-        <module>filter_test</module>
     </modules>
 
 
