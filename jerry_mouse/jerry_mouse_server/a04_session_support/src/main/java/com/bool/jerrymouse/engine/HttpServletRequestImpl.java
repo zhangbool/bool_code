@@ -4,6 +4,7 @@ package com.bool.jerrymouse.engine;
 import com.bool.jerrymouse.connector.HttpExchangeRequest;
 import com.bool.jerrymouse.engine.support.HttpHeaders;
 import com.bool.jerrymouse.engine.support.Parameters;
+import com.bool.jerrymouse.utils.HttpUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import org.slf4j.Logger;
@@ -13,8 +14,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.*;
@@ -105,7 +104,9 @@ public class HttpServletRequestImpl implements HttpServletRequest {
     // header operations //////////////////////////////////////////////////////
     @Override
     public Cookie[] getCookies() {
-        return new Cookie[0];
+        // return new Cookie[0];
+        String cookieValue = this.getHeader("Cookie");
+        return HttpUtils.parseCookies(cookieValue);
     }
 
     @Override
@@ -216,6 +217,7 @@ public class HttpServletRequestImpl implements HttpServletRequest {
             }
             sessionId = UUID.randomUUID().toString();
             String cookieValue = "JSESSIONID=" + sessionId + "; Path=/; SameSite=Strict; HttpOnly;";
+            // todo: 这里的key为啥叫做: set-cookie
             this.response.addHeader("set-cookie", cookieValue);
         }
 

@@ -8,6 +8,7 @@ import com.bool.jerrymouse.engine.filter.LogFilter;
 import com.bool.jerrymouse.engine.servlet.HelloServlet;
 import com.bool.jerrymouse.engine.servlet.IndexServlet;
 import com.bool.jerrymouse.engine.servlet.LoginServlet;
+import com.bool.jerrymouse.engine.servlet.LogoutServlet;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -41,7 +42,7 @@ public class HttpConnector implements HttpHandler, AutoCloseable  {
         this.servletContext = new ServletContextImpl();
 
         this.servletContext.initFilters(List.of(LogFilter.class, HelloFilter.class));
-        this.servletContext.initServlets(List.of(IndexServlet.class, HelloServlet.class, LoginServlet.class));
+        this.servletContext.initServlets(List.of(IndexServlet.class, HelloServlet.class, LoginServlet.class, LogoutServlet.class));
 
         this.host = host;
         this.port = port;

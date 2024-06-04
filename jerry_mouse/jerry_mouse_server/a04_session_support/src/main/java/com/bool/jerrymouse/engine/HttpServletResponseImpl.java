@@ -96,7 +96,6 @@ public class HttpServletResponseImpl implements HttpServletResponse {
     public void sendRedirect(String location) throws IOException {
 
         logger.info("重定向到----{}", location);
-
         checkNotCommitted();
         this.status = 302;
         this.headers.setHeader("Location", location);
@@ -126,8 +125,9 @@ public class HttpServletResponseImpl implements HttpServletResponse {
     }
 
     @Override
-    public void addHeader(String s, String s1) {
-
+    public void addHeader(String name, String value) {
+        checkNotCommitted();
+        this.headers.addHeader(name, value);
     }
 
     @Override

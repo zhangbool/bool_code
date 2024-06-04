@@ -49,6 +49,9 @@ public class LoginServlet extends HttpServlet {
             logger.info("login success------");
             // 在请求中拿到session, 设置相关属性
             req.getSession().setAttribute("username", username);
+
+            logger.info("-------------开始进行页面跳转-------------");
+
             // 跳转到首页的页面
             // #todo: 这里目前应该还是有问题到!!!
             resp.sendRedirect("/");

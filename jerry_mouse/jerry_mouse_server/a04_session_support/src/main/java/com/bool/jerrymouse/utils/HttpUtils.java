@@ -1,6 +1,7 @@
 package com.bool.jerrymouse.utils;
 
 import com.sun.net.httpserver.Headers;
+import jakarta.servlet.http.Cookie;
 
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -48,4 +49,29 @@ public class HttpUtils {
         List<String> values = headers.get(name);
         return values == null || values.isEmpty() ? null : values.get(0);
     }
+
+    public static Cookie[] parseCookies(String cookieValue) {
+        if (cookieValue == null) {
+            return null;
+        }
+        cookieValue = cookieValue.strip();
+        if (cookieValue.isEmpty()) {
+            return null;
+        }
+        String[] ss = cookieValue.split(";");
+        Cookie[] cookies = new Cookie[ss.length];
+        for (int i = 0; i < ss.length; i++) {
+            String s = ss[i].strip();
+            int pos = s.indexOf('=');
+            String name = s;
+            String value = "";
+            if (pos >= 0) {
+                name = s.substring(0, pos);
+                value = s.substring(pos + 1);
+            }
+            cookies[i] = new Cookie(name, value);
+        }
+        return cookies;
+    }
+
 }
