@@ -5,6 +5,7 @@ import com.bool.jerrymouse.engine.HttpServletResponseImpl;
 import com.bool.jerrymouse.engine.ServletContextImpl;
 import com.bool.jerrymouse.engine.filter.HelloFilter;
 import com.bool.jerrymouse.engine.filter.LogFilter;
+import com.bool.jerrymouse.engine.listener.HelloHttpSessionAttributeListener;
 import com.bool.jerrymouse.engine.servlet.HelloServlet;
 import com.bool.jerrymouse.engine.servlet.IndexServlet;
 import com.bool.jerrymouse.engine.servlet.LoginServlet;
@@ -12,14 +13,12 @@ import com.bool.jerrymouse.engine.servlet.LogoutServlet;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.InetSocketAddress;
+import java.util.EventListener;
 import java.util.List;
 
 /**
@@ -43,6 +42,12 @@ public class HttpConnector implements HttpHandler, AutoCloseable  {
 
         this.servletContext.initFilters(List.of(LogFilter.class, HelloFilter.class));
         this.servletContext.initServlets(List.of(IndexServlet.class, HelloServlet.class, LoginServlet.class, LogoutServlet.class));
+
+        // 这里就直接添加了, 没有额外的封装方法
+        List<Class<? extends EventListener>> listenerClasses = List.of(HelloHttpSessionAttributeListener.class);
+        for (Class<? extends EventListener> listenerClass : listenerClasses) {
+            this.servletContext.addListener(listenerClass);
+        }
 
         this.host = host;
         this.port = port;
